@@ -563,3 +563,22 @@ function dto_whitesite_preprocess_node(&$vars, $hook) {
                        "<span class='postedDate'>on " . date("l, M jS, Y", $vars['created']) . " </span>".
                        "<span class='postedBy'>by " . $vars['name'] ."</span>";
 }
+
+/**
+ * Implements hook_form_alter()
+ */
+function dto_whitesite_form_alter(&$form, &$form_state, $form_id) {
+  
+  // Modify feedback form.
+  if (isset($form['#node']) && $form['#node']->type == 'webform' && $form['#node']->title == 'Feedback on design guidance') {
+    // Add link to show/hide feedback form.
+    $form['#prefix'] = '<div class="dto-display-feedback-form-link-wrapper"><a class="dto-display-feedback-form-link" href="#">' . check_plain($form['#node']->title) . '</a></div>';
+    // Add form wrapper.
+    $form['#prefix'] .= '<div class="site-feedback-form-wrapper">';
+    // Close form wrapper.
+    $form['#postfix'] = '</div>';
+    // Atach JavaScript for feedback form.
+    $form['#attached']['js'][] = drupal_get_path('theme', 'dto_whitesite') . '/js/dto_whitesite_feedback_form.js';
+  }
+}
+
